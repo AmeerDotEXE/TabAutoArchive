@@ -1,0 +1,29 @@
+{
+	"background": {
+		"scripts": [
+			"TabArchiver.js"
+		]
+	},
+	"manifest_version": 2,
+	"name": "Tab Auto Archive",
+	"author": "Ameer",
+	"developer": {
+		"name": "Ameer",
+		"url": "https://github.com/AmeerDotEXE/TabAutoArchive"
+	},
+	"version": "1.0",
+	"description": "Auto Close your unused tabs.",
+	"homepage_url": "https://github.com/AmeerDotEXE/TabAutoArchive",
+	"options_ui": {
+		"page": "options.html",
+		"browser_style": true
+	},
+	"permissions": [
+		"alarms",
+		"tabs",
+		"storage"
+	],
+	"browser_action": {
+		"default_title": "Tab Auto Close"
+	}
+}

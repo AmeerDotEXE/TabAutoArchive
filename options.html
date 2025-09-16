@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AutoArchive Settings</title>
+
+	<link rel="stylesheet" href="./options.css">
+</head>
+
+<body>
+	<main>
+		<h2>AutoArchive Settings</h2>
+		<hr>
+		<form>
+			<label>
+				<span>Time to AutoArchive Tab:</span>
+				<hr>
+				<input type="number" id="archiveTimeNumber" min="1" value="1">
+				<select id="archiveTimeType">
+					<option value="seconds">Seconds</option>
+					<option value="minutes">Minutes</option>
+					<option value="hours">Hours</option>
+					<option value="days" selected>Days</option>
+				</select>
+			</label><br>
+			<div class="container-right">
+				<button type="submit" class="success">Save</button>
+			</div>
+		</form>
+	</main>
+
+	<script src="./options.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+:root {
+	--bg-color: hsl(268, 100%, 2%);
+	--text-color: hsl(268, 100%, 98%);
+
+	--input-bg-color: hsl(219, 20%, 20%);
+	--input-text-color: hsl(219, 50%, 100%);
+
+	--success-bg-color: hsl(106, 80%, 40%);
+	--success-text-color: hsl(106, 50%, 100%);
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+
+	color: var(--text-color);
+	background-color: var(--bg-color);
+	font-family: monospace;
+	font-size: 1.25em;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+main {
+	padding: 0.25rem 1rem;
+	width: 100%;
+	max-width: 800px;
+}
+
+label {
+	display: flex;
+	gap: .5rem;
+}
+
+label hr {
+	color: transparent;
+	flex-grow: 1;
+}
+
+label input,
+label select {
+	display: flex;
+
+	color: var(--input-text-color);
+	background-color: var(--input-bg-color);
+
+	border: 0;
+	border-radius: 4px;
+	padding: 0.3rem 0.6rem;
+}
+
+button.success {
+	color: var(--success-text-color);
+	background-color: var(--success-bg-color);
+
+	border: 0;
+	border-radius: 6px;
+	padding: 0.3rem 0.8rem;
+}
+
+.container-right {
+	display: flex;
+	justify-content: end;
+}
