@@ -1,32 +1,33 @@
-console.log("Tab Auto Archive v1.0");
+console.log("Tab Auto Archive v1.1");
 
-let secondsToAutoArchive = 86400;
+const UPDATE_AUTOARCHIVE_INTERVAL = 5; // in mins
+const DEFAULT_TAB_TIMER = 86400;
 
 // Initilize Timer
-browser.storage.local.get().then(db => {
-	secondsToAutoArchive = db.secondsToAutoArchive || 86400;
+browser.storage.local.get("secondsToAutoArchive").then(async db => {
+	const secondsToAutoArchive = db.secondsToAutoArchive || DEFAULT_TAB_TIMER;
+	await browser.storage.session.set({ secondsToAutoArchive });
 
 	archiveOldTabs();
-	setAutoArchiverInterval(secondsToAutoArchive);
+	resetAutoArchiverInterval(secondsToAutoArchive);
 });
 
 // Auto Update Timer
-browser.storage.onChanged.addListener((changes, area) => {
+browser.storage.onChanged.addListener(async (changes, area) => {
 	if (area != "local") return;
 
-	const newDuration = changes?.secondsToAutoArchive?.newValue;
-	if (!Number.isInteger(newDuration)) return;
-	
-	secondsToAutoArchive = newDuration;
-	setAutoArchiverInterval(secondsToAutoArchive);
+	const secondsToAutoArchive = changes?.secondsToAutoArchive?.newValue;
+	if (!Number.isInteger(secondsToAutoArchive)) return;
+
+	await browser.storage.session.set({ secondsToAutoArchive });
+
+	archiveOldTabs();
+	resetAutoArchiverInterval(secondsToAutoArchive);
 });
 
 browser.alarms.onAlarm.addListener(alarm => {
 	if (alarm.name != "AutoArchive") return;
 
-	// update global var, helps when background service goes inactive.
-	secondsToAutoArchive = alarm.periodInMinutes * 60;
-	
 	archiveOldTabs();
 });
 
@@ -34,10 +35,12 @@ browser.alarms.onAlarm.addListener(alarm => {
 
 
 
-function setAutoArchiverInterval(seconds) {
+function resetAutoArchiverInterval(seconds) {
 	browser.alarms.clear("AutoArchive");
 
-	console.log("Reset every", seconds, "seconds");
+	seconds = Math.min(seconds, UPDATE_AUTOARCHIVE_INTERVAL * 60)
+
+	console.log("Reset every", seconds, "seconds.");
 	browser.alarms.create("AutoArchive", {
 		periodInMinutes: seconds / 60,
 	});
@@ -48,7 +51,10 @@ function archiveOldTabs() {
 	browser.tabs.query({ currentWindow: true }).then(onArchiveOldTabs);
 }
 
-function onArchiveOldTabs(tabs) {
+async function onArchiveOldTabs(tabs) {
+	const items = await browser.storage.session.get({ secondsToAutoArchive: DEFAULT_TAB_TIMER });
+	const secondsToAutoArchive = items.secondsToAutoArchive;
+
 	const tabIdsToClose = new Array();
 	tabs.forEach(tab => {
 		try {
@@ -68,7 +74,7 @@ function onArchiveOldTabs(tabs) {
 
 	if (tabIdsToClose.length <= 0) return;
 
-	console.log("Closing "+ tabIdsToClose.length + " Tabs", tabIdsToClose);
+	console.log("Closing " + tabIdsToClose.length + " Tabs", tabIdsToClose);
 	browser.tabs.remove(tabIdsToClose);
 }
 

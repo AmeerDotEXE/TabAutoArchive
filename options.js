@@ -31,7 +31,7 @@ function saveOptions(e) {
 }
 
 function restoreOptions() {
-	browser.storage.local.get()
+	browser.storage.local.get("secondsToAutoArchive")
 	.then(updateCurrentChoices);
 
 	function updateCurrentChoices(result) {
